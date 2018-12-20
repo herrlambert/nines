@@ -3,7 +3,7 @@
     "description": "Prototype of nines pinger written in PHP",
     "type": "project",
     "autoload": {
-        "psr-4": {"nines\\": "src/"}
+        "psr-4": {"Nines\\": "src/"}
     },
     "require": {
         "guzzlehttp/guzzle": "6.3.3"

@@ -1,5 +1,5 @@
 <?php
-namespace nines\lib;
+namespace Nines\Lib;
 
 /**
  * Class Database

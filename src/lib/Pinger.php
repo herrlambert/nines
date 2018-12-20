@@ -1,5 +1,5 @@
 <?php
-namespace nines\lib;
+namespace Nines\Lib;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -13,7 +13,7 @@ use GuzzleHttp\Exception\GuzzleException;
  * be available at a time for a process.
  *
  * Class Pinger
- * @package ninespinger\lib
+ * @package Nines\Lib
  */
 class Pinger
 {

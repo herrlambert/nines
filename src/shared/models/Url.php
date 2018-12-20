@@ -1,5 +1,5 @@
 <?php
-namespace nines\mvc\models;
+namespace Nines\Shared\Models;
 
 
 class Url

@@ -1,11 +1,11 @@
 <?php
-require "../vendor/autoload.php";
-require('../config/config.php');
+require "../../../vendor/autoload.php";
+require('../../../config/config.php');
 
 
-use nines\lib\Database;
-use nines\lib\Pinger;
-use nines\mvc\controllers;
+use Nines\Lib\Database;
+use Nines\Lib\Pinger;
+use Nines\Shared\Controllers;
 
 /**
  * Create a database connection

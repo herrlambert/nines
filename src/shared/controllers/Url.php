@@ -1,8 +1,7 @@
 <?php
-namespace nines\mvc\controllers;
+namespace Nines\Shared\Controllers;
 
-use nines\mvc\models;
-
+use Nines\Shared\Models;
 
 class Url
 {

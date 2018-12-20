@@ -1,9 +1,9 @@
 <?php
-namespace nines\tests\mvc\models;
+namespace Nines\Tests\Shared\Models;
 
 use PHPUnit\Framework\TestCase;
-use nines\mvc\models\Url;
-use nines\tests\TestSetup;
+use Nines\Shared\Models\Url;
+use Nines\Tests\TestSetup;
 
 class UrlTest extends TestCase
 {
