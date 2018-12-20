@@ -1,0 +1,68 @@
+Capabilities to support:
+--------------------------------------------------
+1.  Create a url group
+2.  Add url to url group (and give it a specific name)
+3.  Allow users to give one url different descriptor names in different groups
+4.  Set ping frequency for url group
+5.  display summary results per url group
+6.  display suummary results per url in group -- i.e. details view
+7.  View errors for url in url group
+8.  Set time window for summary calculation for url group (and recalculate summary)
+9.  Remove url from url group (and recalculate summary results)
+10. Retrieve urls by group for pinging
+11. Record results of ping
+12. Calculate summary results based on selected summary time window
+
+
+Database Schema
+--------------------------------------------------
+
+urls
+==================================================
+	id							int (primary key)
+	url							varchar(100)
+	url_name                    varchar(100)
+	urlgroup_id                 int
+	last_ping_time	    		datetime
+    current_total_requests		int
+    current_total_errors		int
+    availability_rating			int
+--------------------------------------------------
+
+urlgroups
+==================================================
+	id							int (primary key)
+	name						varchar(100)
+	ping_frequency				int
+	last_ping_time				datetime
+	metrics_from_date			datetime
+	metrics_to_date				datetime
+	current_total_requests		int
+	current_total_errors		int
+	availability_rating			int
+--------------------------------------------------
+
+head_request_log
+==================================================
+	id							int (primary key)
+	url_id						int
+	request_time				datetime
+	status_code					int
+--------------------------------------------------
+
+get_request_log
+==================================================
+	id							int (primary key)
+	related_head_request_id		int
+	url_id						int
+	request_time				datetime
+	status_code					int
+	response_body				text
+--------------------------------------------------
+
+process [not implemented]
+==================================================
+	id							int (primary key)
+	name						varchar(100)
+	value						varchar(100)
+--------------------------------------------------
