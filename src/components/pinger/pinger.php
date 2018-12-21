@@ -22,9 +22,12 @@ $dbConn = $database->getDbConnection();
 // Create objects
 $urlController = new Controllers\Url($dbConn);
 $responseLogger = new Controllers\ResponseLog($dbConn);
-$urlsArray = $urlController->getUrlsByUrlGroupId(1);
+$urlsArray1 = $urlController->getUrlsByUrlGroupId(1);
+$urlsArray2 = $urlController->getUrlsByUrlGroupId(2);
+$urlsArray3 = $urlController->getUrlsByUrlGroupId(3);
+$urlsArray = array_merge($urlsArray1, $urlsArray2, $urlsArray3);
 $pinger = Pinger::getInstance($responseLogger);
 
 // Ping URLs and log results
 $pingResult = $pinger->pingUrls($urlsArray);
-echo($pingResult);
+echo ($pingResult > 0) ? "Success" : "Failure";

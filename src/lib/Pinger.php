@@ -49,7 +49,7 @@ class Pinger
     }
 
     /**
-     * Send HEAD and (on error) GET requests to URLs in given array
+     * Send HEAD and (on error) GET requests to URLs in given array and return results in format shown below
      *
      * Result array format:
      * array(
@@ -66,24 +66,24 @@ class Pinger
     {
         $requestResultArray = array();
 
-        if (count($urlArrays) > 0) {
+        if (!empty($urlArrays)) {
 
             $responseArray = array();
-            $getResArray = array();
 
             foreach($urlArrays as $urlArray) {
+                $getResArray = array();
                 $headResArray = $this->sendHeadRequest($urlArray['url']);
                 $headResArray['url'] = $urlArray['url'];
                 $headResArray['urlId'] = $urlArray['id'];
 
-                if ($headResArray['statusCode'] >= 400 ) {
+                if (isset($headResArray['statusCode']) && $headResArray['statusCode'] >= 400 ) {
                     $getResArray = $this->sendGetRequest($urlArray['url']);
                     $getResArray['url'] = $urlArray['url'];
                     $getResArray['urlId'] = $urlArray['id'];
                 }
 
                 $responseArray['head_response'] = $headResArray;
-                $responseArray['get_response'] = (!empty($getResArray)) ? $getResArray : null;
+                $responseArray['get_response'] = $getResArray;
 
                 $requestResultArray[] = $responseArray;
             }
@@ -103,7 +103,7 @@ class Pinger
         Array $requestResultsArray) {
 
         $result = false;
-        if (count($requestResultsArray) > 0) {
+        if (!empty($requestResultsArray)) {
             foreach($requestResultsArray as $requestResultArray) {
                 if (!empty($requestResultArray['head_response'])) {
                     $result = $responseLogger->addHeadResponse($requestResultArray['head_response']);
@@ -126,34 +126,43 @@ class Pinger
     private function sendHeadRequest($url)
     {
         if (is_string($url) && !empty($url)) {
-
             $client = new Client();
             $responseArray = [];
-
             try {
                 $response = $client->request('HEAD', $url, ['verify' => false]);
+                // < 400-level responses (not errors)
                 $headers[] = $response->getHeaders();
                 $responseArray['datetime'] = date("Y-m-d H:i:s", time());
                 $responseArray['statusCode'] = $response->getStatusCode();
 
             } catch (ClientException $exception) {
+                // 400-level responses
                 $headers[] = $exception->getResponse()->getHeaders();
                 $responseArray['datetime'] = date("Y-m-d H:i:s", time());
                 $responseArray['statusCode'] = $exception->getResponse()->getStatusCode();
 
             } catch (ServerException $exception) {
+                // 500-level responses
                 $headers[] = $exception->getResponse()->getHeaders();
                 $responseArray['datetime'] = date("Y-m-d H:i:s", time());
                 $responseArray['statusCode'] = $exception->getResponse()->getStatusCode();
 
             } catch (GuzzleException $exception) {
+                // No response, or request timed out
                 $responseArray['error'] = $exception->getMessage();
+                $responseArray['datetime'] = date("Y-m-d H:i:s", time());
+                $responseArray['statusCode'] = 0;
             }
         }
-
         return $responseArray;
     }
 
+    /**
+     * Send GET request for given URL and return response as an array
+     *
+     * @param $url
+     * @return array
+     */
     private function sendGetRequest($url)
     {
         if (is_string($url) && !empty($url)) {
