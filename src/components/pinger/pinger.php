@@ -30,4 +30,4 @@ $pinger = Pinger::getInstance($responseLogger);
 
 // Ping URLs and log results
 $pingResult = $pinger->pingUrls($urlsArray);
-echo ($pingResult > 0) ? "Success" : "Failure";
+echo ($pingResult > 0) ? "Success\n" : "Failure\n";
