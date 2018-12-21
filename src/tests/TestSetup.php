@@ -1,6 +1,6 @@
 <?php
 /**
- * Setup Object Provides Database Connection and User objects for all tests
+ * Setup Object provides database connection and any other basic objects required for testing
  */
 namespace Nines\Tests;
 

@@ -42,7 +42,7 @@ urlgroups
 	availability_rating			int
 --------------------------------------------------
 
-head_request_log
+head_response_log
 ==================================================
 	id							int (primary key)
 	url_id						int
@@ -50,13 +50,13 @@ head_request_log
 	status_code					int
 --------------------------------------------------
 
-get_request_log
+get_response_log
 ==================================================
 	id							int (primary key)
-	related_head_request_id		int
 	url_id						int
 	request_time				datetime
 	status_code					int
+	error_message               text
 	response_body				text
 --------------------------------------------------
 

@@ -16,14 +16,15 @@ $database->createDbConnection();
 $dbConn = $database->getDbConnection();
 
 /**
- * Create Pinger object
- */
-$pinger = Pinger::getInstance();
-
-/**
  * Main program execution - ping urls and output results
  */
-$urlController = new controllers\Url($dbConn);
+
+// Create objects
+$urlController = new Controllers\Url($dbConn);
+$responseLogger = new Controllers\ResponseLog($dbConn);
 $urlsArray = $urlController->getUrlsByUrlGroupId(1);
-$pingResultsArray = $pinger->pingUrls($urlsArray);
-print_r($pingResultsArray);
+$pinger = Pinger::getInstance($responseLogger);
+
+// Ping URLs and log results
+$pingResult = $pinger->pingUrls($urlsArray);
+echo($pingResult);
