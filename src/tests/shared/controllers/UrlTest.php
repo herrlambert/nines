@@ -7,16 +7,14 @@ use Nines\Tests\TestSetup;
 
 class UrlTest extends TestCase
 {
-    private $testSetup;
-    private $dbConn;
     private $url;
 
     // Create an object to use:
     function setUp()
     {
-        $this->testSetup = TestSetup::getInstance();
-        $this->dbConn = $this->testSetup->getDbConn();
-        $this->url = new Url($this->dbConn);
+        $testSetup = TestSetup::getInstance();
+        $dbConn = $testSetup->getDbConn();
+        $this->url = new Url($dbConn);
     }
 
     public function testGetUrlGroups()
