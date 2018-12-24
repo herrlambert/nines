@@ -60,6 +60,16 @@ get_response_log
 	response_body				text
 --------------------------------------------------
 
+ping_frequencies
+==================================================
+	id							int (primary key)
+	key                         varchar(50)
+	name						varchar(100)
+	minute_value      			int
+	hour_value					int
+--------------------------------------------------
+
+
 process [not implemented]
 ==================================================
 	id							int (primary key)

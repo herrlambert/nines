@@ -23,8 +23,9 @@ class Pinger
     private static $instance = null;
 
     private $responseLogger = null;
+    private $pingFrequencyValues = null;
 
-    // Prevent contructing or cloning
+    // Prevent constructing or cloning
     private function __construct() {}
     private function __clone() {}
 
@@ -34,8 +35,69 @@ class Pinger
         if (self::$instance == null) {
             self::$instance = new Pinger();
             self::$instance->responseLogger = $responseLogger;
+
+            self::$instance->pingFrequencyValues = array(
+                'every five minutes' => 5,
+                'every fifteen minutes' => 15,
+                'every half-hour' => 30,
+                'every hour' => 60,
+                'twice daily' => 12,
+                'once daily' => 24
+            );
         }
         return self::$instance;
+    }
+
+    public function getUrlGroupsToPing(Array $urlGroups, Array $pingFrequencies, $currentHour, $currentMinute)
+    {
+        $currentMinute = 10;
+        $currentHour = 3;
+        if ($currentMinute % 5 === 0) {
+            $frequencyKeys = array('5_min'); // TODO: Get this from function instead of hard-coding
+            foreach($pingFrequencies as $pingFrequency) {
+                if ($pingFrequency['hour_value'] === 0) {
+                    if ($pingFrequency['minute_value'] % $currentMinute === 0) {
+                        $frequencyKeys[] = $pingFrequency['key'];
+                    }
+                } else {
+                    if (($pingFrequency['minute_value'] % $currentMinute === 0) &&
+                        ($pingFrequency['hour_value'] % $currentHour === 0)) {
+                        $frequencyKeys[] = $pingFrequency['key'];
+                    }
+                }
+            }
+            die(print_r($frequencyKeys));
+        }
+        die('nope');
+
+        // Determine frequency values relevant for the give current hour and minute
+        $frequencies = array();
+        if ($currentMinute % $frequencyValues['every five minutes'] === 0) {
+            $frequencies[] = $frequencyValues['every five minutes']; }
+
+        if ($currentMinute % $frequencyValues['every fifteen minutes'] === 0) {
+            $frequencies[] = $frequencyValues['every fifteen minutes'];
+        }
+        if ($currentMinute % $frequencyValues['every half-hour'] === 0) {
+            $frequencies[] = $frequencyValues['every half-hour'];
+        }
+        if ($currentMinute % $frequencyValues['every hour'] === 0) {
+            $frequencies[] = $frequencyValues['every hour'];
+        }
+        if (($currentHour % $frequencyValues['twice daily'] === 0) &&
+            ($currentMinute % $frequencyValues['every hour'] === 0)) {
+            $frequencies[] = $frequencyValues['twice daily'];
+        }
+        if (($currentHour % $frequencyValues['once daily'] === 0) &&
+            ($currentMinute % $frequencyValues['every hour'] === 0)) {
+            $frequencies[] = $frequencyValues['once daily'];
+        }
+
+        die(print_r($frequencies));
+
+
+
+        return $frequencies;
     }
 
     /**
