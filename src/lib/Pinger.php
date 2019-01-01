@@ -48,56 +48,12 @@ class Pinger
         return self::$instance;
     }
 
-    public function getUrlGroupsToPing(Array $urlGroups, Array $pingFrequencies, $currentHour, $currentMinute)
+    public function getUrlGroupsToPing(Array $urlGroups, Array $relevantPingFrequencyIds)
     {
-        $currentMinute = 10;
-        $currentHour = 3;
-        if ($currentMinute % 5 === 0) {
-            $frequencyKeys = array('5_min'); // TODO: Get this from function instead of hard-coding
-            foreach($pingFrequencies as $pingFrequency) {
-                if ($pingFrequency['hour_value'] === 0) {
-                    if ($pingFrequency['minute_value'] % $currentMinute === 0) {
-                        $frequencyKeys[] = $pingFrequency['key'];
-                    }
-                } else {
-                    if (($pingFrequency['minute_value'] % $currentMinute === 0) &&
-                        ($pingFrequency['hour_value'] % $currentHour === 0)) {
-                        $frequencyKeys[] = $pingFrequency['key'];
-                    }
-                }
-            }
-            die(print_r($frequencyKeys));
-        }
-        die('nope');
+        // NEED TO ADD LOGIC HERE
+        // AND NEED TO UPDATE DB SCHEMA DOC (current schema is mac nines_dev).
 
-        // Determine frequency values relevant for the give current hour and minute
-        $frequencies = array();
-        if ($currentMinute % $frequencyValues['every five minutes'] === 0) {
-            $frequencies[] = $frequencyValues['every five minutes']; }
-
-        if ($currentMinute % $frequencyValues['every fifteen minutes'] === 0) {
-            $frequencies[] = $frequencyValues['every fifteen minutes'];
-        }
-        if ($currentMinute % $frequencyValues['every half-hour'] === 0) {
-            $frequencies[] = $frequencyValues['every half-hour'];
-        }
-        if ($currentMinute % $frequencyValues['every hour'] === 0) {
-            $frequencies[] = $frequencyValues['every hour'];
-        }
-        if (($currentHour % $frequencyValues['twice daily'] === 0) &&
-            ($currentMinute % $frequencyValues['every hour'] === 0)) {
-            $frequencies[] = $frequencyValues['twice daily'];
-        }
-        if (($currentHour % $frequencyValues['once daily'] === 0) &&
-            ($currentMinute % $frequencyValues['every hour'] === 0)) {
-            $frequencies[] = $frequencyValues['once daily'];
-        }
-
-        die(print_r($frequencies));
-
-
-
-        return $frequencies;
+        return $urlGroups;
     }
 
     /**
@@ -108,6 +64,26 @@ class Pinger
     {
         $requestResults = $this->sendRequests($urlArrays);
         return $this->logRequestResults($this->responseLogger, $requestResults);
+    }
+
+    public function getRelevantPingFrequencyIds(Array $pingFrequencies, $currentMinute, $currentHour)
+    {
+        $pingFrequencyIds = array();
+        if ($currentMinute % 5 === 0) {
+            foreach($pingFrequencies as $pingFrequency) {
+                if ($pingFrequency['hour_value'] === '0') {
+                    if ($currentMinute % $pingFrequency['minute_value'] === 0) {
+                        $pingFrequencyIds[] = $pingFrequency['id'];
+                    }
+                } else {
+                    if (($currentMinute % $pingFrequency['minute_value'] === 0) &&
+                        ($currentHour % $pingFrequency['hour_value'] === 0)) {
+                        $pingFrequencyIds[] = $pingFrequency['id'];
+                    }
+                }
+            }
+        }
+        return $pingFrequencyIds;
     }
 
     /**

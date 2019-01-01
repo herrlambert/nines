@@ -30,10 +30,14 @@ $urlGroups = $urlController->getUrlGroups();
 
 // Filter to get only groups to ping this time
 $currentDate = getdate();
-$pingFrequencies = $urlController->getPingFrequencies();
+$allPingFrequencies = $urlController->getPingFrequencies();
 
-$urlGroupsToPing = $pinger->getUrlGroupsToPing($urlGroups, $pingFrequencies,
-    $currentDate['hours'], $currentDate['minutes']);
+$relevantPingFrequencyIds = $pinger->getRelevantPingFrequencyIds($allPingFrequencies, $currentDate['minutes'], $currentDate['hours']);
+
+die(print_r($relevantPingFrequencyIds));
+
+//$urlGroupsToPing = $pinger->getUrlGroupsToPing($urlGroups, $pingFrequencies,
+//    $currentDate['hours'], $currentDate['minutes']);
 
 $urlsArray1 = $urlController->getUrlsByUrlGroupId(1);
 $urlsArray2 = $urlController->getUrlsByUrlGroupId(2);

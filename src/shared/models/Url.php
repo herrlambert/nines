@@ -133,7 +133,7 @@ class Url
         try {
 
             $query = "
-            SELECT pf.key, pf.name, pf.minute_value, pf.hour_value
+            SELECT pf.id, pf.key, pf.name, pf.minute_value, pf.hour_value
             FROM ping_frequencies pf";
 
             $stmt = $this->dbConn->prepare($query);
